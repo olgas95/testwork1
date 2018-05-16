@@ -37,12 +37,14 @@ function createComponent(parentElement, options){
     var menuRendered = false;
     var tableRendered = false;
     var searchRendered = false;
+    var createDataFormRendered = false;
   
     firstRender();
 
     function firstRender(){
         createMenuElement(); // Меню, снизу динамично всё
         changeTable(0); // По умолчанию первый элемент активный
+        
     }
  
 //------------ВЕРХНЕЕ МЕНЮ ИЗ КНОПОК---------------//
@@ -114,6 +116,7 @@ function createComponent(parentElement, options){
                 changeTable(activeTable);
             }
         }
+ 
 
     }
 
@@ -144,7 +147,6 @@ function createComponent(parentElement, options){
         createHeaders(array.elemsHeader); // ссылаемся на функцию создания заголовков таблицы
         createTableElements(array.elems); // ссылаемся на функцию создания ячеек таблицы
 
-        parentElement.appendChild(table); 
 
         if(!tableRendered) {
             tableRendered = true;
@@ -161,7 +163,6 @@ function createComponent(parentElement, options){
                     th.classList.add('thActive');
                     var arrow = (sortBy > 0) ? " &#9650;" : " &#9660;"; 
                     th.innerHTML = headerElement + arrow; 
-                
                 }else{
                     th.innerHTML = headerElement; 
                 }
@@ -189,7 +190,6 @@ function createComponent(parentElement, options){
             }else{
                 sortBy *= -1; 
             }
-
             changeTable(numberOfTable); 
         }
 
@@ -224,8 +224,10 @@ function createComponent(parentElement, options){
             });
 
             table.appendChild(tbody); 
-        }
-        
+            parentElement.appendChild(table); 
+    }
+
+     
         function removeOldTable(){ // функция удаления старой таблицы
             var headersOfTable = document.getElementsByTagName("th");
             for (var i = 0; i < headersOfTable.length; i++){ 
@@ -234,35 +236,48 @@ function createComponent(parentElement, options){
             var removableTable = document.getElementById("mainTable");
             removableTable.remove();
         }
-
-        }
-        // Форма для добавления строк 
-        createDataForm();
-        function createDataForm(){
-            var form = document.createElement("form");
-            form.setAttribute("id","dataForm");
-
-            var input = document.createElement("input");
-            input.setAttribute("id","dataRow");
-            input.setAttribute("placeholder","Введите данные");
-            input.setAttribute("autocomplete","off");
-
-            var button = document.createElement("button");
-            button.innerText = "Добавить";
-            button.addEventListener("click", addDataRow);
-            
-            form.appendChild(input);
-            form.appendChild(button);
-            container.appendChild(form);
-        
-            function addDataRow(Event){
-            //Считываем данные с формы
-            var newRow = input.value;
-            var arr = newRow.split("|");
-            state[numberOfTable].elems.push(arr);
-            }
-      
-
     }
+
+
+     // Форма для добавления строк 
+     createDataForm();
+     function createDataForm(){
+         if(createDataFormRendered) return;
+         
+         var form = document.createElement("form");
+         form.setAttribute("id","dataForm");
+
+         var input = document.createElement("input");
+         input.setAttribute("placeholder","Введите данные");
+         input.setAttribute("autocomplete","off");
+
+         var button = document.createElement("button");
+         button.innerText = "Добавить";
+         button.addEventListener("click", addDataRow);
+         
+         function addDataRow(Event){
+             Event.preventDefault();
+             //Считываем данные с формы
+             var newRow = input.value;
+             var arrData = newRow.split("|");
+             if(state[activeTable].elemsHeader.length !== arrData.length){
+                 alert("Некорректное заполнение!");
+                 return;
+             }
+             if(state[activeTable].elemsHeader.length !== arrData.length){
+                 alert("Некорректное заполнение!");
+                 return;
+             }
+             state[activeTable].elems.push(arrData);
+             changeTable(activeTable);
+         }
+
+         form.appendChild(input);
+         form.appendChild(button);
+         container.appendChild(form);
+
+         createDataFormRendered = true;
+     }
+      
 
 }

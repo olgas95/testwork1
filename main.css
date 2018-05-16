@@ -11,7 +11,8 @@ html, body{
     padding: 10px 0;
     text-align: center;
     border: 1px solid #eee;
-    overflow: auto;
+    position: relative;
+    box-sizing: border-box;
 }
 #container #menu{
     display: inline-flex;
@@ -56,16 +57,16 @@ html, body{
 
 
 #container table{
-    width:  600px;
     margin: 20px auto;
     border-collapse: collapse;
+    box-sizing: border-box;
 }
 
 #tableOne{ display: block; }
+#container table thead{ background: rgba(180, 220, 130, 0.5);}
 
 #container table thead tr th{
-    width: 10%;
-    background: rgba(180, 220, 130, 0.5);
+    width: 140px;
     text-align: center;
     font-size: 16px;
     padding: 5px;
@@ -75,14 +76,21 @@ html, body{
     cursor: pointer;
     background: rgba(180, 220, 130, 0.8);
 }
+#container table tbody{
+    height: 380px;
+    overflow-y: overlay;
+}
+
 #container table tbody tr td{
-    width: 1px;
+    width: 140px;
     background: rgba(180, 220, 130, 0.1);
     text-align: center;
     font-size: 16px;
     padding: 5px;
     border: 1px solid rgba(180, 220, 130, 0.5);
 }
+
+thead > tr, tbody{ display:block;}
 
 #container table thead tr .thActive{
     background: rgb(180, 220, 130);
@@ -95,6 +103,10 @@ html, body{
     justify-content: center;
     align-items: stretch;
     margin: 20px auto;
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
 }
 #dataForm input{
     display: inline;
