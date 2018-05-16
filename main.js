@@ -30,10 +30,13 @@ function createComponent(parentElement, options){
     var state = options;
     var sortBy = -1; 
     var activeTable = 0; 
+    var functionSortByField;
+    var searchText = "";
+
     var sortIsEnabled = false;
     var menuRendered = false;
     var tableRendered = false;
-    var functionSortByField;
+    var searchRendered = false;
   
     firstRender();
 
@@ -72,7 +75,7 @@ function createComponent(parentElement, options){
             activeTable = number;
             return makeAction(number);
         }
-
+        
 
         function makeAction(number){
             changeMenu(number); // Изменить активное меню
@@ -87,6 +90,31 @@ function createComponent(parentElement, options){
             sortIsEnabled = false;
         }
 
+        // Поисковая форма
+        createSearchForm(); 
+        function createSearchForm(){ 
+            if(searchRendered) return;
+            var form = document.createElement("form");
+            form.setAttribute("type","text");
+            form.setAttribute("onsubmit","return false;");
+            
+            var searchForm = document.createElement("input");
+            searchForm.setAttribute("autocomplete","off");
+            searchForm.setAttribute("id","search_id");
+            searchForm.setAttribute("placeholder","Найти...");
+            searchForm.addEventListener('input', TableSearch);
+            
+            form.appendChild(searchForm);
+            buttonRow.appendChild(form);
+            searchRendered = true;
+
+            function TableSearch(Event){
+                var valueSearch = Event.target.value;
+                searchText = valueSearch.toLowerCase().trim();
+                changeTable(activeTable);
+            }
+        }
+
     }
 
 //------------ТАБЛИЦЫ---------------//
@@ -97,6 +125,19 @@ function createComponent(parentElement, options){
 
         var array = Object.assign({}, state[numberOfTable]); // копируем значения всех свойств из исходника в целевой объект
     
+        //отбрасываем лишнее при поиске
+        if(searchText){
+            array.elems = array.elems.filter(function(rowFilter){
+                var data = false;
+                rowFilter.forEach(function(cellFilter){
+                    var searchElement = cellFilter.toString().toLowerCase().indexOf(searchText); // возвращает первый индекс, по которому данный элемент может быть найден, или -1 - такого индекса нет.
+                    if ( ~searchElement) data = true; 
+                })
+                return data;
+            })  
+        }
+        
+        
         var table = document.createElement("TABLE"); 
         table.setAttribute("id","mainTable");
 
@@ -194,5 +235,34 @@ function createComponent(parentElement, options){
             removableTable.remove();
         }
 
+        }
+        // Форма для добавления строк 
+        createDataForm();
+        function createDataForm(){
+            var form = document.createElement("form");
+            form.setAttribute("id","dataForm");
+
+            var input = document.createElement("input");
+            input.setAttribute("id","dataRow");
+            input.setAttribute("placeholder","Введите данные");
+            input.setAttribute("autocomplete","off");
+
+            var button = document.createElement("button");
+            button.innerText = "Добавить";
+            button.addEventListener("click", addDataRow);
+            
+            form.appendChild(input);
+            form.appendChild(button);
+            container.appendChild(form);
+        
+            function addDataRow(Event){
+            //Считываем данные с формы
+            var newRow = input.value;
+            var arr = newRow.split("|");
+            state[numberOfTable].elems.push(arr);
+            }
+      
+
     }
+
 }

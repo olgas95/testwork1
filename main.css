@@ -37,6 +37,24 @@ html, body{
 }
 #container #menu .action{ background:rgba(150, 200, 110, 0.5); }
 
+#container #menu form{
+    display: inline-block;
+    width: auto;
+    text-align: center;
+    margin: 20px;
+}
+#search_id{
+    width: auto;
+    border: 1px solid #999;
+    margin: 0;
+    text-align: left;
+    padding: 5px 10px;
+    line-height: 30px;
+    font-size: 16px;
+    color: #222;
+}
+
+
 #container table{
     width:  600px;
     margin: 20px auto;
@@ -70,5 +88,53 @@ html, body{
     background: rgb(180, 220, 130);
 }
 
+#dataForm{
+    display: inline-flex;
+    width: 80%;
+    height: auto;
+    justify-content: center;
+    align-items: stretch;
+    margin: 20px auto;
+}
+#dataForm input{
+    display: inline;
+    margin: 0;
+    padding: 4px 0;
+    width: 70%;
+    text-align: center;
+    font-size: 16px;
+    border: 2px solid rgb(255, 220, 95);
+}
+#dataForm button:focus,
+#dataForm input:focus{
+    outline: none;
+}
+#dataForm button{
+    display: inline;
+    position: relative;
+    margin: 0;
+    width: 28%;
+    padding: 4px 0;
+    border: none;
+    font-size: 16px;
+    box-shadow: none;
+    background: rgb(255, 220, 95)
+}
+#dataForm button::after,
+#dataForm button::before{
+    content:"";
+    width: 20px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -20px;
+    background: #fff;
+    z-index: 1;
+}
+#dataForm button::before{ transform: skew(45deg);}
+#dataForm button::after{ transform: skew(-45deg);}
 
-
+#dataForm button:hover{
+    cursor: pointer;
+    background: rgb(243, 198, 34);
+}
