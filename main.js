@@ -20,6 +20,11 @@ var options = [{
 
 }];
 
+// Извлечение сохраненных данных
+var retTable = JSON.parse(localStorage.getItem("array"));
+if( retTable !== null){
+    options = retTable;
+}
 
 
 var container = document.getElementById("container");
@@ -44,6 +49,8 @@ function createComponent(parentElement, options){
     function firstRender(){
         createMenuElement(); // Меню, снизу динамично всё
         changeTable(0); // По умолчанию первый элемент активный
+        createSearchForm(); // Поиск
+        createDataForm(); // Добавление строк
         
     }
  
@@ -58,7 +65,7 @@ function createComponent(parentElement, options){
             var topButton = document.createElement("span"); 
             topButton.classList.add("topButton");
             topButton.setAttribute("id","button" + buttonId);
-            topButton.innerHTML = element.title; 
+            topButton.innerText = element.title; 
             topButton.addEventListener("click", buttonClick); 
 
             if(element.active){
@@ -91,40 +98,40 @@ function createComponent(parentElement, options){
             elemToMakeActive.classList.add("action");
             sortIsEnabled = false;
         }
-
-        // Поисковая форма
-        createSearchForm(); 
-        function createSearchForm(){ 
-            if(searchRendered) return;
-            var form = document.createElement("form");
-            form.setAttribute("type","text");
-            form.setAttribute("onsubmit","return false;");
-            
-            var searchForm = document.createElement("input");
-            searchForm.setAttribute("autocomplete","off");
-            searchForm.setAttribute("id","search_id");
-            searchForm.setAttribute("placeholder","Найти...");
-            searchForm.addEventListener('input', TableSearch);
-            
-            form.appendChild(searchForm);
-            buttonRow.appendChild(form);
-            searchRendered = true;
-
-            function TableSearch(Event){
-                var valueSearch = Event.target.value;
-                searchText = valueSearch.toLowerCase().trim();
-                changeTable(activeTable);
-            }
-        }
- 
-
     }
+
+    // Поисковая форма
+    function createSearchForm(){ 
+        if(searchRendered) return;
+        var form = document.createElement("form");
+        form.setAttribute("type","text");
+        form.setAttribute("id","searchForm");
+        form.setAttribute("onsubmit","return false;");
+        
+        var searchForm = document.createElement("input");
+        searchForm.setAttribute("autocomplete","off");
+        searchForm.setAttribute("id","search_id");
+        searchForm.setAttribute("placeholder","Найти...");
+        searchForm.addEventListener('input', TableSearch);
+        
+        form.appendChild(searchForm);
+        parentElement.appendChild(form);
+        searchRendered = true;
+
+        function TableSearch(Event){
+            var valueSearch = Event.target.value;
+            searchText = valueSearch.toLowerCase().trim();
+            changeTable(activeTable);
+        }
+    }
+
 
 //------------ТАБЛИЦЫ---------------//
     function changeTable(numberOfTable){
         if(tableRendered) {
             removeOldTable();
         }
+        
 
         var array = Object.assign({}, state[numberOfTable]); // копируем значения всех свойств из исходника в целевой объект
     
@@ -161,10 +168,10 @@ function createComponent(parentElement, options){
                 var th = document.createElement("TH");
                 if(id === (Math.abs(sortBy) - 1) && sortIsEnabled){
                     th.classList.add('thActive');
-                    var arrow = (sortBy > 0) ? " &#9650;" : " &#9660;"; 
-                    th.innerHTML = headerElement + arrow; 
+                    var arrow = (sortBy > 0) ? " ▲" : " ▼"; 
+                    th.innerText = headerElement + arrow; 
                 }else{
-                    th.innerHTML = headerElement; 
+                    th.innerText = headerElement; 
                 }
                 th.setAttribute("id","cell" + id);
                 th.addEventListener("click", sortByField); // повесили обработчик (сортировка)
@@ -215,9 +222,9 @@ function createComponent(parentElement, options){
 
                 rowElem.forEach(function(cellElem){
                     var td = document.createElement("TD"); 
-                    td.innerHTML = cellElem; 
+                    td.innerText = cellElem; 
                     
-                    tr.appendChild(td); // добавляем ячейки
+                    tr.appendChild(td); 
                 });
 
                 tbody.appendChild(tr); 
@@ -240,7 +247,6 @@ function createComponent(parentElement, options){
 
 
      // Форма для добавления строк 
-     createDataForm();
      function createDataForm(){
          if(createDataFormRendered) return;
          
@@ -264,12 +270,10 @@ function createComponent(parentElement, options){
                  alert("Некорректное заполнение!");
                  return;
              }
-             if(state[activeTable].elemsHeader.length !== arrData.length){
-                 alert("Некорректное заполнение!");
-                 return;
-             }
              state[activeTable].elems.push(arrData);
              changeTable(activeTable);
+
+             saveData();
          }
 
          form.appendChild(input);
@@ -278,6 +282,14 @@ function createComponent(parentElement, options){
 
          createDataFormRendered = true;
      }
+
+       //Сохранение новых данных
+       function saveData(){
+        var savedTable = JSON.stringify(state);
+        console.log(savedTable);
+        localStorage.setItem("array", savedTable);
+    }
+   
       
 
 }
