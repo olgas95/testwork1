@@ -1,0 +1,67 @@
+html, body{
+    width: auto;
+    height: auto;
+    margin: 0;
+}
+.container{
+    display: block;
+    width: 800px;
+    height: 600px;
+    margin: 20px auto;
+    padding: 10px 0;
+    text-align: center;
+    border: 1px solid #eee;
+    overflow: auto;
+}
+.container .flexbox{
+    display: inline-flex;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: baseline;
+}
+.container .flexbox span{
+    width: 20%;
+    margin: 20px;
+    padding: 5px 10px;
+    border: 1px solid #999;
+    text-align: center;
+    line-height: 30px;
+    font-size: 18px;
+    color:#222;
+}
+.container .flexbox .topButton{ background: #ccc; }
+.container .flexbox .topButton:hover{
+    cursor: pointer;
+    background: #ddd;
+}
+.container .flexbox .action{ background:rgba(150, 200, 110, 0.5); }
+
+.container table{
+    display: none;
+    width:  600px;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+#tableOne{ display: block; }
+
+.container table thead tr th{
+    width: 10%;
+    background: rgba(180, 220, 130, 0.5);
+    text-align: center;
+    font-size: 16px;
+    padding: 5px;
+    border: 1px solid rgba(180, 220, 130, 0.5);
+}
+
+.container table tbody tr td{
+    width: 1px;
+    background: rgba(180, 220, 130, 0.1);
+    text-align: center;
+    font-size: 16px;
+    padding: 5px;
+    border: 1px solid rgba(180, 220, 130, 0.5);
+}
+
+
