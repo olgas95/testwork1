@@ -3,7 +3,7 @@ html, body{
     height: auto;
     margin: 0;
 }
-.container{
+#container{
     display: block;
     width: 800px;
     height: 600px;
@@ -13,14 +13,14 @@ html, body{
     border: 1px solid #eee;
     overflow: auto;
 }
-.container .flexbox{
+#container #menu{
     display: inline-flex;
     width: 100%;
     margin: 0 auto;
     justify-content: center;
     align-items: baseline;
 }
-.container .flexbox span{
+#container #menu span{
     width: 20%;
     margin: 20px;
     padding: 5px 10px;
@@ -30,15 +30,14 @@ html, body{
     font-size: 18px;
     color:#222;
 }
-.container .flexbox .topButton{ background: #ccc; }
-.container .flexbox .topButton:hover{
+#container #menu .topButton{ background: #ccc; }
+#container #menu .topButton:hover{
     cursor: pointer;
     background: #ddd;
 }
-.container .flexbox .action{ background:rgba(150, 200, 110, 0.5); }
+#container #menu .action{ background:rgba(150, 200, 110, 0.5); }
 
-.container table{
-    display: none;
+#container table{
     width:  600px;
     margin: 20px auto;
     border-collapse: collapse;
@@ -46,7 +45,7 @@ html, body{
 
 #tableOne{ display: block; }
 
-.container table thead tr th{
+#container table thead tr th{
     width: 10%;
     background: rgba(180, 220, 130, 0.5);
     text-align: center;
@@ -54,8 +53,11 @@ html, body{
     padding: 5px;
     border: 1px solid rgba(180, 220, 130, 0.5);
 }
-
-.container table tbody tr td{
+#container table thead tr th:hover{
+    cursor: pointer;
+    background: rgba(180, 220, 130, 0.8);
+}
+#container table tbody tr td{
     width: 1px;
     background: rgba(180, 220, 130, 0.1);
     text-align: center;
@@ -63,5 +65,10 @@ html, body{
     padding: 5px;
     border: 1px solid rgba(180, 220, 130, 0.5);
 }
+
+#container table thead tr .thActive{
+    background: rgb(180, 220, 130);
+}
+
 
 
